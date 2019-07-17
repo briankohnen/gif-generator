@@ -22,7 +22,7 @@ $(document).on("click", ".gifGenButton", function() {
       url: queryURL,
       method: "GET"
     }).then(function(response) {
-        console.log(response);
+
         var results = response.data;
         $("#allGifs").empty();
 
@@ -31,7 +31,7 @@ $(document).on("click", ".gifGenButton", function() {
             var stillUrl = results[i].images.original_still.url;
             var animUrl = results[i].images.original.url;
 
-            var gifContainer = $("<div>");
+            var gifContainer = $("<div class='gifContainer'>");
 
             var addGif = $("<img class='thisGif'>");
             addGif.attr("state", "still");
@@ -48,7 +48,6 @@ $(document).on("click", ".gifGenButton", function() {
             $(gifContainer).append(addGif, gifRating);
 
             $("#allGifs").prepend(gifContainer);
-            console.log(addGif.attr("class"));
         }
       });
   });
@@ -68,6 +67,9 @@ $(document).on("click", ".gifGenButton", function() {
     }
 
     buttonGenerate();
+
+    var inputField = document.getElementById("inputForm");
+        inputField.reset();
 
     });
 
