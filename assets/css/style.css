@@ -38,13 +38,23 @@ body {
 }
 
 .gifContainer {
-    background: oldlace;
     border: 2px solid black;
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+    grid-template-rows: auto auto;
 }
 
 .thisGif {
+    margin-top: 10px;
     max-width: 400px;
     max-height: 600px;
+    grid-column: 2 / 4;
+    grid-row: 1 / 2;
+}
+
+.gifInfo {
+    grid-column: 2 / 4;
+    grid-row: 2 / 3;
 }
 
 

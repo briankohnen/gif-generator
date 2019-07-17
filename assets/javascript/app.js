@@ -1,6 +1,7 @@
 // giphy api key : x6ZEkt0MNBEzavwLgHLGLOyulDDrwcE6
 
-var topics = ["coding", "games", "movies", "coffee", "photos", "skateboard", "penguins", "dogs"];
+var topics = ["smile", "frown", "cringe", "grimace", "happy", "rage", "sad", "excited",
+              "interest", "disgust"];
 
 
 $(document).ready(function() {
@@ -22,7 +23,7 @@ $(document).on("click", ".gifGenButton", function() {
       url: queryURL,
       method: "GET"
     }).then(function(response) {
-
+        console.log(response);
         var results = response.data;
         $("#allGifs").empty();
 
@@ -41,11 +42,14 @@ $(document).on("click", ".gifGenButton", function() {
             addGif.attr("alt", queryTopic + " image");
 
 
-            var gifRating = $("<p>");
-            $(gifRating).text("Rating : " + results[i].rating);
+            var gifInfo = $("<p class='gifInfo'>");
+            var gifRating = results[i].rating;
+            var gifTitle = results[i].title;
+            $(gifInfo).html("Title : " + gifTitle + "<br>" +
+                            "Rating : " + gifRating + "<br>");
 
 
-            $(gifContainer).append(addGif, gifRating);
+            $(gifContainer).append(addGif, gifInfo);
 
             $("#allGifs").prepend(gifContainer);
         }
