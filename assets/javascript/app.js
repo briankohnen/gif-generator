@@ -41,7 +41,6 @@ $(document).on("click", ".gifGenButton", function() {
             addGif.attr("still", stillUrl);
             addGif.attr("alt", queryTopic + " image");
 
-
             var gifInfo = $("<p class='gifInfo'>");
             var gifRating = results[i].rating;
             var gifTitle = results[i].title;
@@ -49,9 +48,18 @@ $(document).on("click", ".gifGenButton", function() {
                             "Rating : " + gifRating + "<br>");
 
 
-            $(gifContainer).append(addGif, gifInfo);
+            var favButton  = $("<button class='favButton'>");
+            favButton.attr("buttonName", gifTitle);
+            favButton.attr("src", stillUrl);
+            favButton.attr("still", stillUrl);
+            favButton.attr("anim", animUrl);
+            favButton.text("Add to Favorites");
+
+
+            $(gifContainer).append(favButton, addGif, gifInfo);
 
             $("#allGifs").prepend(gifContainer);
+            
         }
       });
   });
@@ -93,6 +101,38 @@ $(document).on("click", ".gifGenButton", function() {
         $(this).attr("src", $(this).attr("still"));
       }
     });
+
+  $(document).on("click", ".favButton", function() {
+
+    var theFavButton = $("<button class='favGif'>" + $(this).attr("buttonName") + "</button>");
+    theFavButton.attr("src", $(this).attr("src"));
+    theFavButton.attr("still", $(this).attr("still"));
+    theFavButton.attr("anim", $(this).attr("anim"));
+
+
+    $("#favorites").append(theFavButton);
+
+    $(document).on("click", ".favGif", function() {
+        $("#allGifs").empty();
+    
+                var gifContainer = $("<div class='favGifContainer'>");
+    
+                var favoGif = $("<img class='thisGif'>");
+                favoGif.attr("state", "still");
+                favoGif.attr("src", $(this).attr("src"));
+                favoGif.attr("still", $(this).attr("still"));
+                favoGif.attr("anim", $(this).attr("anim"));
+    
+                
+         $(gifContainer).append(favoGif);
+    
+         $("#allGifs").prepend(gifContainer);
+    
+    
+      });
+    
+  });
+
 
 
     buttonGenerate();
