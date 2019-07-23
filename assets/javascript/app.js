@@ -3,10 +3,12 @@
 // create array of strings pertaining to topic; 'emotions'
 var topics = ["smile", "frown", "cringe", "grimace", "happy", "rage", "sad", "excited",
               "interest", "disgust"];
+// define array to store user's favorite Gifs
+var favsArray = [];
 
 $(document).ready(function() {
 
-// function that generates buttons with text from each item in 'topics' and displays on .html
+// function that generates buttons with text by looping through each item in 'topics' and displays on .html
 function buttonGenerate () {
   // empty div containing buttons each time new buttons are added
     $("#gifButtons").empty();
@@ -120,40 +122,94 @@ $(document).on("click", ".gifGenButton", function() {
 // function on clicking the addToFav button
   $(document).on("click", ".addToFav", function() {
 
-    // create a 'favorite' button. take the name and src/still/animation URLS from the addToFav (this) button.
-    var favButton = $("<button class='myFavButton'>" + $(this).attr("buttonName") + "</button>");
-    favButton.attr("src", $(this).attr("src"));
-    favButton.attr("still", $(this).attr("still"));
-    favButton.attr("anim", $(this).attr("anim"));
+    // create a 'favorite' button. take the name and src/still/animation URLS from the addToFav (this) button
+   // var favButton = $("<button class='myFavButton'>" + $(this).attr("buttonName") + "</button>");
+
+    // create favGifInfo object and take information from the .addToFav button and store for later use
+    var favGifInfo = {};
+    favGifInfo.favButton = $("<button class='myFavButton'>" + $(this).attr("buttonName") + "</button>");
+    favGifInfo.name = $(this).attr("buttonName");
+    favGifInfo.src = $(this).attr("src");
+    favGifInfo.still = $(this).attr("still");
+    favGifInfo.anim = $(this).attr("anim");
+
+    favsArray.push(favGifInfo);
 
     // display the favButton in the #favorites div on the page
-    $("#favorites").append(favButton);
+    $("#favorites").append(favGifInfo.favButton);
+  });
     
-  });
 
-// function on clicking the 'favorite Button'
-  $(document).on("click", ".myFavButton", function() {
-    // empty the div displaying all Gifs
-    $("#allGifs").empty();
+        // function on clicking the 'favorite Button'
+      $(document).on("click", ".myFavButton", function() {
+        // empty the div displaying all Gifs
+        $("#allGifs").empty();
+        
+            for (var i = 0; i < favsArray.length; i++) {
+                // create a div to store the Gif
+                var favGifContainer = $("<div class='favGifContainer'>");
 
-            // create a div to store the Gif
-            var favGifContainer = $("<div class='favGifContainer'>");
+                // create the Gif image
+                var favoGif = $("<img class='aGif'>");
 
-            // create the Gif image
-            var favoGif = $("<img class='aGif'>");
+                // take the the image attributes from favGifInfo objects in the favsArray
+                favoGif.attr("state", "still");
+                favoGif.attr("src", favsArray[i].src);
+                favoGif.attr("still", favsArray[i].still);
+                favoGif.attr("anim", favsArray[i].anim);
 
-            // take the the image attributes from the myFavButton
-            favoGif.attr("state", "still");
-            favoGif.attr("src", $(this).attr("src"));
-            favoGif.attr("still", $(this).attr("still"));
-            favoGif.attr("anim", $(this).attr("anim"));
+                var removeFav = $("<button class='removeFav'>");
+                removeFav.text("Remove from Favorites");
+                removeFav.attr("data-attr", i);
 
-     // attach the image to the gif container, and display the content on the page   
-     $(favGifContainer).append(favoGif);
+              // attach the image to the gif container, and display the content on the page   
+              $(favGifContainer).append(favoGif, removeFav);
 
-     $("#allGifs").prepend(favGifContainer);
-  });
+              $("#allGifs").prepend(favGifContainer);
+        
+         }
+        });
+        // function for removing favorites from favorite section
+         $(document).on("click", ".removeFav", function() {
 
-// call initial buttons to be generated onto the page
+          var whereToSpliceFav = ($(this).attr("data-attr"));
+
+          favsArray.splice(parseInt(whereToSpliceFav), 1);
+
+          $("#favorites").empty();
+          
+          $("#allGifs").empty();
+
+            for (var i = 0; i < favsArray.length; i++) {
+                // create a div to store the Gif
+                var favGifContainer = $("<div class='favGifContainer'>");
+
+                // create the Gif image
+                var favoGif = $("<img class='aGif'>");
+
+                // take the the image attributes from favGifInfo objects in the favsArray
+                favoGif.attr("state", "still");
+                favoGif.attr("src", favsArray[i].src);
+                favoGif.attr("still", favsArray[i].still);
+                favoGif.attr("anim", favsArray[i].anim);
+
+                var removeFav = $("<button class='removeFav'>");
+                removeFav.text("Remove from Favorites");
+                removeFav.attr("data-attr", i);
+
+
+              // attach the image to the gif container, and display the content on the page   
+              $(favGifContainer).append(favoGif, removeFav);
+
+              $("#allGifs").prepend(favGifContainer);
+              $("#favorites").append(favsArray[i].favButton);
+        
+          }
+                  
+        });
+
+    // call initial buttons to be generated onto the page
     buttonGenerate();
-});
+
+      });
+
